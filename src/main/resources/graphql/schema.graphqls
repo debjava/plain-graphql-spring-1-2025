@@ -1,0 +1,108 @@
+
+type Query {
+	getAppUserById(id: ID): AppUser
+	getAllTypesOfUser: [User]
+	getBookByName(name: String): Book
+}
+
+
+type Mutation {
+	createAppUser(inUser: AppUserInput): AppUser
+	updateAppUserByAddress(inUser: AppUserInput): String
+	deleteAppUser(userId: String): AppResult
+}
+
+"""
+How to Define Interface Types
+"""
+
+interface User {
+    id : ID!
+    fullName : String!
+    cityName: String
+    phoneNos: [String]
+}
+
+type ContractUser implements User  {
+    id : ID!
+    fullName : String!
+    cityName: String
+    phoneNos: [String]
+}
+
+type FulltimeUser implements User  {
+    id : ID!
+    fullName : String!
+    cityName: String
+    phoneNos: [String]
+}
+
+"""
+How to Define Input Object Type
+"""
+
+input AppUserInput {
+	firstName: String
+	lastName: String
+	mStatus: MaritalStatus
+	status: Boolean
+	salary: Int
+	cityName: String
+	pinCode: String
+	phoneNos: [String]
+	bankName: String
+	accountNo: String
+}
+
+type AppUser {
+	id: ID
+	firstName: String
+	lastName: String
+	mStatus: MaritalStatus
+	status: Boolean
+	salary: Int
+	adrs: Address
+	phoneNos: [String]
+	bankAccounts: [BankAccount]
+}
+
+type BankAccount {
+	bankName: String
+	accountNo: String
+}
+
+"""
+How to Define Enum in java
+"""
+
+enum MaritalStatus {
+  MARRIED
+  UNMARRIED
+  SINGLE
+}
+
+type Address {
+	cityName: String
+	pinCode: String
+}
+
+type AppResult {
+	result: String
+}
+
+"""
+Below is the case for @SchemaMapping, but in higher version, it is not required.
+The below type works fine.
+"""
+
+type Author {
+	id: ID
+	name: String
+	books: [Book]
+}
+
+type Book {
+	isbnNo: ID
+	name: String
+	authors: [Author]
+}
