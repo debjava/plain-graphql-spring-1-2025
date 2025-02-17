@@ -1,7 +1,5 @@
 package com.ddlab.rnd.exception;
 
-import java.net.BindException;
-
 import org.springframework.graphql.data.method.annotation.GraphQlExceptionHandler;
 import org.springframework.graphql.execution.ErrorType;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,5 +19,4 @@ public class AppExceptionHandler {
 				.errorType(ErrorType.BAD_REQUEST)
 				.build();
 	}
-
 }

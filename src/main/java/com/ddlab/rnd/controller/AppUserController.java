@@ -1,9 +1,11 @@
 package com.ddlab.rnd.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,10 @@ import com.ddlab.rnd.entity.ContractUser;
 import com.ddlab.rnd.entity.FulltimeUser;
 import com.ddlab.rnd.entity.User;
 import com.ddlab.rnd.util.AppUtil;
+
+import graphql.GraphQLContext;
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
 
 @Controller
 public class AppUserController {
@@ -34,13 +40,31 @@ public class AppUserController {
 	}
 	
 	@MutationMapping
-	public AppResult deleteAppUser(@Argument String userId) {
+	public AppResult deleteAppUser(@ContextValue(name = "myHeader1") String header1,
+			@ContextValue(name = "myHeader2") String header2, @Argument String userId) {
 		System.out.println("What is the userId to be deleted: "+userId);
+		System.out.println("What is the header1: ?"+header1);
+		System.out.println("What is the header2: ?"+header2);
 		return new AppResult("AppUser information deleted successfully ...");
 	}
 	
 	@QueryMapping
-	public Book getBookByName(@Argument String name) {
+	public List<String> getAllPhoneNosByNames(@Argument List<String> names) {
+		return List.of("111", "222", "333");
+	}
+	
+	@QueryMapping
+	public List<AppUser> getAllAppUsers() {
+		List<AppUser> users = new ArrayList<>();
+		PodamFactory factory = new PodamFactoryImpl();
+		AppUser appUser1 = factory.manufacturePojo(AppUser.class);
+		users.add(AppUtil.getDefaultUser(Long.valueOf(123)));
+		users.add(appUser1);
+		return users;
+	}
+	
+	@QueryMapping
+	public Book getBookByName(GraphQLContext context, @Argument String name) {
 		Book book = new Book();
 		book.setIsbnNo("Some ISBN No");
 		book.setName("A Good Book");
@@ -49,6 +73,8 @@ public class AppUserController {
 				new Author(333, "Charles Dickens", List.of(book))
 			);
 		book.setAuthors(authors);
+		context.put("ResponseHeader1", "Value-1");
+		context.put("ResponseHeader2", "Value-2");
 		return book;
 	}
 	

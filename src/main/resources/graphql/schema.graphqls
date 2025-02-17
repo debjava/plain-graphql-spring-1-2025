@@ -1,15 +1,18 @@
 
 type Query {
 	getAppUserById(id: ID): AppUser
+	getAllAppUsers: [AppUser] # To get list of AppUser
 	getAllTypesOfUser: [User]
-	getBookByName(name: String): Book
+	getBookByName(name: String): Book # How to set Response Header
+	
+	getAllPhoneNosByNames(names:[String]): [String] # Send list of Strings to get list of Strings
 }
 
 
 type Mutation {
-	createAppUser(inUser: AppUserInput): AppUser
+	createAppUser(inUser: AppUserInput): AppUser # To send list of phone numbers
 	updateAppUserByAddress(inUser: AppUserInput): String
-	deleteAppUser(userId: String): AppResult
+	deleteAppUser(userId: String): AppResult # How to get Request Header before removing
 }
 
 """

@@ -250,3 +250,21 @@ Response from Server
         }
     }
 }	
+
+
+How to get Request Header in GraphQL
+-------------
+class RequestHeaderInterceptor implements WebGraphQlInterceptor { 
+
+    @Override
+    public Mono<WebGraphQlResponse> intercept(WebGraphQlRequest request, Chain chain) {
+        String value = request.getHeaders().getFirst("myHeader");
+        request.configureExecutionInput((executionInput, builder) ->
+                builder.graphQLContext(Collections.singletonMap("myHeader", value)).build());
+        return chain.next(request);
+    }
+}
+
+How to add response Header
+
+https://netflix.github.io/dgs/advanced/intercepting-http-request-response/
